@@ -8,6 +8,7 @@
 		:root {
 			color-scheme: light;
 			font-family: Arial, Helvetica, sans-serif;
+			--weather-column-width: 700px;
 			background: #f4f7f9;
 			color: #1d252c;
 		}
@@ -20,7 +21,7 @@
 
 		main {
 			display: grid;
-			grid-template-columns: 320px minmax(0, 1fr);
+			grid-template-columns: 320px minmax(0, 1fr) var(--weather-column-width);
 			gap: 16px;
 			height: 100vh;
 			padding: 16px 16px 40px;
@@ -34,7 +35,8 @@
 		}
 
 		.metar-pane,
-		.wind-pane {
+		.wind-pane,
+		.weather-pane {
 			display: grid;
 			align-content: start;
 			gap: 16px;
@@ -49,6 +51,13 @@
 			font-size: 18px;
 			font-weight: 500;
 			color: #000;
+		}
+
+		.weather-widget {
+			width: 100%;
+			height: 300px;
+			border: 0;
+			background: #fff;
 		}
 
 		.loaded-at {
@@ -108,8 +117,13 @@
 			<script src="https://www.windfinder.com/widget/forecast/js/toronto_island?unit_wave=m&unit_rain=mm&unit_temperature=c&unit_wind=kts&unit_pressure=hPa&days=1&show_day=0&show_pressure=0&show_waves=0&show_temperature=0&show_clouds=0"></script><noscript><a rel="nofollow" href="https://www.windfinder.com/forecast/toronto_island?utm_source=forecast&utm_medium=web&utm_campaign=homepageweather&utm_content=noscript-Toronto Island Airport">Wind forecast for Toronto Island Airport</a> provided by <a rel="nofollow" href="https://www.windfinder.com?utm_source=forecast&utm_medium=web&utm_campaign=homepageweather&utm_content=noscript-logo">windfinder.com</a></noscript>
 
 
-		<iframe align="top" src="https://www.weather.gov/wrh/timeseries?site=CYTZ&hours=12&units=english_k&chart=off&headers=on&obs=tabular&hourly=true&pview=standard&font=12&plot=wind_speedgust" width="500" height="300" frameborder="0" ></iframe> 
+		</section>
 
+		<section class="weather-pane">
+			<iframe
+				class="weather-widget"
+				src="https://www.weather.gov/wrh/timeseries?site=CYTZ&hours=12&units=english_k&chart=off&headers=on&obs=tabular&hourly=true&pview=standard&font=12&plot=wind_speedgust" ">
+			</iframe>
 		</section>
 	</main>
 	<div class="loaded-at" id="loaded-at">Loaded at ...</div>
