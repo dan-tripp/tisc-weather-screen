@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Weather Screen</title>
+	<style>
+		:root {
+			color-scheme: light;
+			font-family: Arial, Helvetica, sans-serif;
+			background: #f4f7f9;
+			color: #1d252c;
+		}
+
+		body {
+			margin: 0;
+			padding: 16px;
+		}
+
+		main {
+			display: grid;
+			gap: 16px;
+			max-width: 960px;
+			margin: 0 auto;
+		}
+
+		.embed {
+			width: 100%;
+			border: 0;
+			background: #fff;
+		}
+
+		.current {
+			width: 296px;
+			height: 191px;
+		}
+
+		.hourly {
+			display: block;
+			height: calc(min(760px, calc(100vh - 239px)) + 140px);
+			transform: translateY(-300px);
+		}
+
+		.hourly-window {
+			height: min(760px, calc(100vh - 239px));
+			min-height: 420px;
+			overflow: hidden;
+		}
+
+		.sailflow {
+			width: 100vw;
+			height: 760px;
+			margin-left: calc(50% - 50vw);
+			border: 0;
+			background: #fff;
+		}
+	</style>
+</head>
+<body>
+	<main>
+
+		<div class="hourly-window">
+			<iframe
+				class="embed hourly"
+				title="Environment Canada hourly forecast"
+				src="https://weather.gc.ca/en/forecast/hourly/index.html?coords=43.627%2C-79.394&lang=e">
+			</iframe>
+		</div>
+
+			<iframe
+				title="navcan"
+				src="https://spaces.navcanada.ca/workspace/aeroview/CYTZ">
+			</iframe>
+
+			<script src="https://www.windfinder.com/widget/forecast/js/toronto_island?unit_wave=m&unit_rain=mm&unit_temperature=c&unit_wind=kts&unit_pressure=hPa&days=1&show_day=0&show_pressure=0&show_waves=0&show_temperature=0&show_clouds=0"></script><noscript><a rel="nofollow" href="https://www.windfinder.com/forecast/toronto_island?utm_source=forecast&utm_medium=web&utm_campaign=homepageweather&utm_content=noscript-Toronto Island Airport">Wind forecast for Toronto Island Airport</a> provided by <a rel="nofollow" href="https://www.windfinder.com?utm_source=forecast&utm_medium=web&utm_campaign=homepageweather&utm_content=noscript-logo">windfinder.com</a></noscript>
+		
+	</main>
+</body>
+</html>
