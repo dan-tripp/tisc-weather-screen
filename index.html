@@ -62,7 +62,51 @@
 			transform: translateY(calc(-1 * var(--weather-scroll-offset)));
 		}
 
+		.weather-frame {
+			display: grid;
+			grid-template-areas:
+				"top top top"
+				"left content right"
+				"bottom bottom bottom";
+			grid-template-columns: 24px minmax(0, 1fr) 24px;
+			grid-template-rows: 24px 300px 24px;
+			width: 100%;
+			background: #1d252c;
+			color: #fff;
+			font-size: 11px;
+			font-weight: 700;
+			letter-spacing: 0;
+			line-height: 24px;
+			text-transform: uppercase;
+		}
+
+		.weather-border-text {
+			overflow: hidden;
+			white-space: nowrap;
+		}
+
+		.weather-border-top {
+			grid-area: top;
+		}
+
+		.weather-border-right {
+			grid-area: right;
+			writing-mode: vertical-rl;
+		}
+
+		.weather-border-bottom {
+			grid-area: bottom;
+			transform: rotate(180deg);
+		}
+
+		.weather-border-left {
+			grid-area: left;
+			writing-mode: vertical-rl;
+			transform: rotate(180deg);
+		}
+
 		.weather-window {
+			grid-area: content;
 			height: 300px;
 			overflow: hidden;
 		}
@@ -127,16 +171,18 @@
 		</section>
 
 		<section class="weather-pane">
-			<b>Recent wind history:</b>
-			<div class="weather-window">
-				<iframe
-					class="weather-widget"
-					title="weather.gov wind speed and gust observations"
-					src="https://www.weather.gov/wrh/timeseries?site=CYTZ&hours=12&units=english_k&chart=off&headers=on&obs=tabular&hourly=true&pview=standard&font=12&plot=wind_speedgust">
-				</iframe>
-
-
-
+			<div class="weather-frame" aria-label="Recent wind history">
+				<div class="weather-border-text weather-border-top" aria-hidden="true">recent wind history recent wind history recent wind history recent wind history recent wind history recent wind history recent wind history recent wind history</div>
+				<div class="weather-border-text weather-border-right" aria-hidden="true">recent wind history recent wind history recent wind history recent wind history recent wind history recent wind history recent wind history recent wind history</div>
+				<div class="weather-border-text weather-border-bottom" aria-hidden="true">recent wind history recent wind history recent wind history recent wind history recent wind history recent wind history recent wind history recent wind history</div>
+				<div class="weather-border-text weather-border-left" aria-hidden="true">recent wind history recent wind history recent wind history recent wind history recent wind history recent wind history recent wind history recent wind history</div>
+				<div class="weather-window">
+					<iframe
+						class="weather-widget"
+						title="weather.gov wind speed and gust observations"
+						src="https://www.weather.gov/wrh/timeseries?site=CYTZ&hours=12&units=english_k&chart=off&headers=on&obs=tabular&hourly=true&pview=standard&font=12&plot=wind_speedgust">
+					</iframe>
+				</div>
 			</div>
 
 			<b>Current radar:</b>
