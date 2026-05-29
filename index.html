@@ -9,6 +9,7 @@
 			color-scheme: light;
 			font-family: Arial, Helvetica, sans-serif;
 			--weather-column-width: 700px;
+			--weather-scroll-offset: 300px;
 			background: #f4f7f9;
 			color: #1d252c;
 		}
@@ -55,9 +56,15 @@
 
 		.weather-widget {
 			width: 100%;
-			height: 300px;
+			height: calc(300px + var(--weather-scroll-offset));
 			border: 0;
 			background: #fff;
+			transform: translateY(calc(-1 * var(--weather-scroll-offset)));
+		}
+
+		.weather-window {
+			height: 300px;
+			overflow: hidden;
 		}
 
 		.loaded-at {
@@ -120,10 +127,13 @@
 		</section>
 
 		<section class="weather-pane">
-			<iframe
-				class="weather-widget"
-				src="https://www.weather.gov/wrh/timeseries?site=CYTZ&hours=12&units=english_k&chart=off&headers=on&obs=tabular&hourly=true&pview=standard&font=12&plot=wind_speedgust" ">
-			</iframe>
+			<div class="weather-window">
+				<iframe
+					class="weather-widget"
+					title="weather.gov wind speed and gust observations"
+					src="https://www.weather.gov/wrh/timeseries?site=CYTZ&hours=12&units=english_k&chart=off&headers=on&obs=tabular&hourly=true&pview=standard&font=12&plot=wind_speedgust">
+				</iframe>
+			</div>
 		</section>
 	</main>
 	<div class="loaded-at" id="loaded-at">Loaded at ...</div>
