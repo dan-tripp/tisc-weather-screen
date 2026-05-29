@@ -23,7 +23,7 @@
 			grid-template-columns: 320px minmax(0, 1fr);
 			gap: 16px;
 			height: 100vh;
-			padding: 16px;
+			padding: 16px 16px 40px;
 			box-sizing: border-box;
 		}
 
@@ -38,7 +38,7 @@
 			display: grid;
 			align-content: start;
 			gap: 16px;
-			height: calc(100vh - 32px);
+			height: calc(100vh - 56px);
 			overflow: auto;
 		}
 
@@ -50,7 +50,35 @@
 			font-weight: 500;
 			color: #000;
 		}
+
+		.loaded-at {
+			position: fixed;
+			right: 16px;
+			bottom: 10px;
+			font-size: 13px;
+			color: #4a5965;
+		}
 	</style>
+	<script>
+		window.setTimeout(function () {
+			window.location.reload();
+		}, 5 * 60 * 1000);
+
+		window.addEventListener("DOMContentLoaded", function () {
+			var loadedAt = document.getElementById("loaded-at");
+			var now = new Date();
+
+			if (loadedAt) {
+				loadedAt.textContent = "This page was last refreshed on " + now.toLocaleString([], {
+					weekday: "long",
+					month: "long",
+					day: "numeric",
+					hour: "numeric",
+					minute: "2-digit",
+				}) + ".  The refresh times of the source data are unknown.";
+			}
+		});
+	</script>
 </head>
 <body>
 	<main>
@@ -80,5 +108,6 @@
 			<script src="https://www.windfinder.com/widget/forecast/js/toronto_island?unit_wave=m&unit_rain=mm&unit_temperature=c&unit_wind=kts&unit_pressure=hPa&days=1&show_day=0&show_pressure=0&show_waves=0&show_temperature=0&show_clouds=0"></script><noscript><a rel="nofollow" href="https://www.windfinder.com/forecast/toronto_island?utm_source=forecast&utm_medium=web&utm_campaign=homepageweather&utm_content=noscript-Toronto Island Airport">Wind forecast for Toronto Island Airport</a> provided by <a rel="nofollow" href="https://www.windfinder.com?utm_source=forecast&utm_medium=web&utm_campaign=homepageweather&utm_content=noscript-logo">windfinder.com</a></noscript>
 		</section>
 	</main>
+	<div class="loaded-at" id="loaded-at">Loaded at ...</div>
 </body>
 </html>
