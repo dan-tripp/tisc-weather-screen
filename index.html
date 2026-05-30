@@ -5,6 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>TISC Weather Screen</title>
 	<style>
+
 		:root {
 			color-scheme: light;
 			font-family: Arial, Helvetica, sans-serif;
@@ -120,24 +121,76 @@
 		}
 	</style>
 	<script>
-		window.setTimeout(function () {
-			window.location.reload();
-		}, 5 * 60 * 1000);
 
-		window.addEventListener("DOMContentLoaded", function () {
-			var loadedAt = document.getElementById("loaded-at");
-			var now = new Date();
+function scheduleWholePageReload() {
+	window.setTimeout(function () {
+		window.location.reload();
+	}, 5 * 60 * 1000);
+}
+scheduleWholePageReload();
 
-			if (loadedAt) {
-				loadedAt.textContent = "This page was last refreshed on " + now.toLocaleString([], {
-					weekday: "long",
-					month: "long",
-					day: "numeric",
-					hour: "numeric",
-					minute: "2-digit",
-				}) + ".  The refresh times of the source data are unknown.";
-			}
+function setPageLoadedAtText() {
+	window.addEventListener("DOMContentLoaded", function () {
+		var loadedAt = document.getElementById("loaded-at");
+		var now = new Date();
+
+		if (loadedAt) {
+			loadedAt.textContent = "This page was last refreshed on " + now.toLocaleString([], {
+				weekday: "long",
+				month: "long",
+				day: "numeric",
+				hour: "numeric",
+				minute: "2-digit",
+			}) + ".  The refresh times of the source data are unknown.";
+		}
+	});
+}
+setPageLoadedAtText();
+
+function workAroundWindGuruBug() {
+	window.addEventListener("load", function () {
+		var windguruRetryDelay = 5*1000;
+
+		function isWindGuruIframe(frame) {
+			return frame.tagName === "IFRAME" &&
+				frame.src.indexOf("windguru.cz/") !== -1;
+		}
+
+		function scheduleWindGuruIframeReloadIfNecessary(frame) {
+			if(frame.dataset.windguruReloadScheduled === "true") return; // this is necessary (or at least: /warranted/) b/c we'll get to this line repeatedly for the windguru iframe.  in turn b/c our mutation observer casts a wide net in terms of the events it triggers on.  I don't know which events happen and when, and I don't need to know. 
+
+			frame.dataset.windguruReloadScheduled = "true";
+
+			window.setTimeout(function () {
+				frame.dataset.windguruReloadScheduled = "false";
+				if(frame.offsetHeight > 0) return; // 0 is the symptom of the problem 
+				frame.src = frame.src; // this is what does the "reload".
+			}, windguruRetryDelay);
+		}
+
+		function scheduleWindGuruIframeReloadsIfNecessary() {
+			document.querySelectorAll("iframe").forEach(function (iframe) {
+				if(isWindGuruIframe(iframe)) {
+					scheduleWindGuruIframeReloadIfNecessary(iframe);
+				}
+			});
+		}
+
+		var observer = new MutationObserver(scheduleWindGuruIframeReloadsIfNecessary);
+
+		observer.observe(document.body, {
+			childList: true,
+			subtree: true,
+			attributes: true,
+			attributeFilter: ["style", "src"],
 		});
+
+		scheduleWindGuruIframeReloadsIfNecessary();
+	});
+}
+workAroundWindGuruBug();
+
+
 	</script>
 </head>
 <body>
