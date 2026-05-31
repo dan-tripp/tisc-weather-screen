@@ -135,10 +135,18 @@
 			--wordy-border-content-height: auto;
 		}
 
-		.loaded-at {
+		.footer-line-page-load-time {
 			position: fixed;
 			bottom: 10px;
 			font-size: 18px;
+		}
+
+		.footer-line-viewport-size {
+			position: fixed;
+			right: 10px;
+			bottom: 10px;
+			font-size: 18px;
+			color: #ccc;
 		}
 	</style>
 	<script>
@@ -150,17 +158,24 @@ function scheduleWholePageReload() {
 }
 scheduleWholePageReload();
 
-function setPageLoadedAtText() {
-	let el = document.getElementById("loaded-at");
-	let now = new Date();
-
-	el.textContent = "This page was last refreshed on " + now.toLocaleString([], {
-		weekday: "long",
-		month: "long",
-		day: "numeric",
-		hour: "numeric",
-		minute: "2-digit",
-	}) + ".  The refresh times of the source data are unknown.";
+function setFooterLineText() {
+	{
+		let el = document.getElementById("footer-line-page-load-time");
+		let now = new Date();
+		let s = "This page was last refreshed on " + now.toLocaleString([], {
+			weekday: "long",
+			month: "long",
+			day: "numeric",
+			hour: "numeric",
+			minute: "2-digit",
+		}) + ".  The refresh times of the source data are unknown.";
+		el.textContent = s;
+	}
+	{
+		let el = document.getElementById("footer-line-viewport-size");
+		let s = `${window.innerWidth} x ${window.innerHeight}`;
+		el.textContent = s;
+	}
 }
 
 function addWordyBorder(element_, string_) {
@@ -181,7 +196,7 @@ window.addEventListener("DOMContentLoaded", function () {
 	addWordyBorder(document.getElementById("windfinder-forecast"), "WIND FINDER FORECAST\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0");
 	addWordyBorder(document.getElementById("recent-wind-history"), "TODAY'S WIND HISTORY\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0");
 	addWordyBorder(document.getElementById("current-rain-radar"), "CURRENT RADAR\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0");
-	setPageLoadedAtText();
+	setFooterLineText();
 });
 
 /* this works around a bug in wind guru where visually the wind guru content doesn't show up at all.  it takes up no space in the layout.  but inside the iframe, the dom content is all there.  afaics it happens solely b/c sometimes the wind guru iframe gets a style attribute which contains "height: 0px".  and of course it was the wind guru JS that did that.  I don't know why it did it.  the wind guru JS must have a bug.  I couldn't reproduce this bug on demand by reloading the page w/ ctrl+r.  but it was easy to reproduce if I left the page open in a tab for a few hours.  I saw the bug that way about five times, in the first two days of this project.  IIRC I saw it both on localhost and github pages.  */
@@ -295,7 +310,8 @@ workAroundWindGuruBug();
 		</section>
 	</main>
 
-	<div class="loaded-at" id="loaded-at">Loaded at ...</div>
+	<div class="footer-line-page-load-time" id="footer-line-page-load-time">...</div>
+	<div class="footer-line-viewport-size" id="footer-line-viewport-size">...</div>
 
 </body>
 </html>
