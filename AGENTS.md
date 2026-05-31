@@ -1,0 +1,1 @@
+- don't try to be accessible for screen reader users or keyboard users.  the reason is because this project will be a visual and "read-only" kiosk.  no one will use it with a screen reader, nor keyboard, nor mouse for that matter.
