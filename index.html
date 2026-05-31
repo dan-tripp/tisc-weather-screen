@@ -287,8 +287,11 @@ workAroundWindGuruBug();
 			</div>
 
 			<div class="wordy-border-frame radar-wordy-border-frame" id="current-rain-radar">
+				<!-- source: https://embed.windy.com/config/map 
+				 - we use windy.com.  windy.app seems to be a copy-cat, possibly a scam. also their widget is worse. 
+				 - we used to use "&overlay=rain&product=ecmwf" (== "rain, thunder") but I stopped because it also shows a wind layer and that wind direction layer is of the surface wind.  surface wind is misleading b/c it's not the direction that the rain/thunder clouds are moving.  I observed this many times easily by looking around north america for a minute.  IMO if we show any wind direction on the same map as rain/thunder then people will think that the wind direction is the direction that the rain/thunder is moving in.  so I switched to "product=radar" b/c it shows no wind.  it does show rain clouds somehow (I'm ignorant of the metric it uses), and thunder icons, and the occasional thunder flash animation.  I hope it's useful. --> 
 				<div class="wordy-border-content">
-					<iframe width="650" height="300" src="https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=mm&metricTemp=°C&metricWind=kt&zoom=6&overlay=rain&product=ecmwf&level=surface&lat=43.443&lon=-79.04" frameborder="0"></iframe>
+					<iframe width="650" height="300" src="https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=mm&metricTemp=°C&metricWind=kt&zoom=7&overlay=radar&product=radar&level=surface&lat=43.443&lon=-79.04&message=true" frameborder="0"></iframe>
 				</div>
 			</div>
 
