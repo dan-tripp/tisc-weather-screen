@@ -58,56 +58,39 @@
 		}
 
 		.wordy-border-frame {
-			--wordy-border-top-height: 24px;
 			--wordy-border-content-height: 300px;
-			display: grid;
-			grid-template-areas:
-				"top top top"
-				"left content right"
-				"bottom bottom bottom";
-			grid-template-columns: var(--wordy-border-width) minmax(0, 1fr) var(--wordy-border-width);
-			grid-template-rows: var(--wordy-border-top-height) var(--wordy-border-content-height) var(--wordy-border-top-height);
+			position: relative;
 			width: 100%;
-			background: #4d4d4d;
+			padding: var(--wordy-border-width);
+			box-sizing: border-box;
 			color: #fff;
-			font-size: 11px;
+			overflow: hidden;
+		}
+
+		.wordy-border-svg {
+			position: absolute;
+			inset: 0;
+			z-index: 2;
+			display: block;
+			width: 100%;
+			height: 100%;
+			pointer-events: none;
+		}
+
+		.wordy-border-svg-fill {
+			fill: #4d4d4d;
+			fill-rule: evenodd;
+		}
+
+		.wordy-border-svg text {
+			fill: #fff;
 			font-weight: 700;
 			letter-spacing: 0;
-			line-height: 24px;
-		}
-
-		.wordy-border-text {
-			min-width: 0;
-			min-height: 0;
-			overflow: hidden;
-			white-space: nowrap;
-			contain: size;
-		}
-
-		.wordy-border-top {
-			grid-area: top;
-			padding-left: 6px;
-		}
-
-		.wordy-border-right {
-			grid-area: right;
-			writing-mode: vertical-rl;
-		}
-
-		.wordy-border-bottom {
-			grid-area: bottom;
-			padding-left: 6px;
-			transform: rotate(180deg);
-		}
-
-		.wordy-border-left {
-			grid-area: left;
-			writing-mode: vertical-rl;
-			transform: rotate(180deg);
 		}
 
 		.wordy-border-content {
-			grid-area: content;
+			position: relative;
+			z-index: 1;
 			height: var(--wordy-border-content-height);
 			overflow: hidden;
 			background: #fff;
@@ -179,15 +162,149 @@ function setFooterLineText() {
 }
 
 function addWordyBorder(element_, string_) {
-	let repeatedText = (string_ + " ").repeat(99);
-	let content = element_.firstElementChild;
+	let borderThickness = parseFloat(getComputedStyle(element_).getPropertyValue("--wordy-border-width"));
+	let borderOuterRadius = 34;
+	let gapBetweenBorderInnerEdgeAndTextBaseline = 7;
+	let gapBetweenBorderOuterEdgeAndTextAscent = 4;
+	let endFadeStart = 40;
+	let endFadeFinish = 10;
 
-	for(let side of ["top", "right", "bottom", "left"]) {
-		let borderText = document.createElement("div");
-		borderText.className = "wordy-border-text wordy-border-" + side;
-		borderText.textContent = repeatedText;
-		element_.insertBefore(borderText, content);
+	endFadeStart += borderThickness;
+	endFadeFinish += borderThickness;
+	let svgNs = "http://www.w3.org/2000/svg";
+	let content = element_.firstElementChild;
+	let uniqueId = "wordy-border-" + element_.id;
+
+	function makeSvgElement(tagName) {
+		return document.createElementNS(svgNs, tagName);
 	}
+
+	function roundedRectPath(x, y, width_, height_, radius_) {
+		let r = Math.min(radius_, width_ / 2, height_ / 2);
+		let right_ = x + width_;
+		let bottom_ = y + height_;
+
+		return [
+			`M ${x + r} ${y}`,
+			`H ${right_ - r}`,
+			`A ${r} ${r} 0 0 1 ${right_} ${y + r}`,
+			`V ${bottom_ - r}`,
+			`A ${r} ${r} 0 0 1 ${right_ - r} ${bottom_}`,
+			`H ${x + r}`,
+			`A ${r} ${r} 0 0 1 ${x} ${bottom_ - r}`,
+			`V ${y + r}`,
+			`A ${r} ${r} 0 0 1 ${x + r} ${y}`,
+			"Z",
+		].join(" ");
+	}
+
+	function roundedRectTextPath(x, y, width_, height_, radius_, endY) {
+		let r = Math.min(radius_, width_ / 2, height_ / 2);
+		let right_ = x + width_;
+		let bottom_ = y + height_;
+
+		return [
+			`M ${x + r} ${y}`,
+			`H ${right_ - r}`,
+			`A ${r} ${r} 0 0 1 ${right_} ${y + r}`,
+			`V ${bottom_ - r}`,
+			`A ${r} ${r} 0 0 1 ${right_ - r} ${bottom_}`,
+			`H ${x + r}`,
+			`A ${r} ${r} 0 0 1 ${x} ${bottom_ - r}`,
+			`V ${endY}`,
+		].join(" ");
+	}
+
+	let svg = makeSvgElement("svg");
+	let defs = makeSvgElement("defs");
+	let path = makeSvgElement("path");
+	let fadeGradient = makeSvgElement("linearGradient");
+	let fadeStart = makeSvgElement("stop");
+	let fadeEnd = makeSvgElement("stop");
+	let fadeMask = makeSvgElement("mask");
+	let fadeMaskSolid = makeSvgElement("rect");
+	let fadeMaskGradient = makeSvgElement("rect");
+	let borderFill = makeSvgElement("path");
+	let endFadeCover = makeSvgElement("rect");
+	let text = makeSvgElement("text");
+	let textPath = makeSvgElement("textPath");
+
+	svg.classList.add("wordy-border-svg");
+	borderFill.classList.add("wordy-border-svg-fill");
+	path.id = uniqueId + "-path";
+	fadeGradient.id = uniqueId + "-fade-gradient";
+	fadeMask.id = uniqueId + "-fade-mask";
+	fadeMask.setAttribute("maskUnits", "userSpaceOnUse");
+	fadeGradient.setAttribute("x1", 0);
+	fadeGradient.setAttribute("y1", 0);
+	fadeGradient.setAttribute("x2", 0);
+	fadeGradient.setAttribute("y2", 1);
+	fadeStart.setAttribute("offset", 0);
+	fadeStart.setAttribute("stop-color", "#000");
+	fadeEnd.setAttribute("offset", 1);
+	fadeEnd.setAttribute("stop-color", "#fff");
+	fadeMaskSolid.setAttribute("x", 0);
+	fadeMaskSolid.setAttribute("y", 0);
+	fadeMaskSolid.setAttribute("fill", "#fff");
+	fadeMaskGradient.setAttribute("fill", "url(#" + fadeGradient.id + ")");
+	text.setAttribute("mask", "url(#" + fadeMask.id + ")");
+	endFadeCover.setAttribute("fill", "#4d4d4d");
+	textPath.setAttribute("href", "#" + path.id);
+	textPath.textContent = (string_ + " ").repeat(99);
+
+	fadeGradient.append(fadeStart, fadeEnd);
+	fadeMask.append(fadeMaskSolid, fadeMaskGradient);
+	defs.append(path, fadeGradient, fadeMask);
+	text.append(textPath);
+	svg.append(defs, borderFill, text, endFadeCover);
+	element_.append(svg);
+
+	function updateWordyBorder() {
+		let width = element_.offsetWidth;
+		let height = element_.offsetHeight;
+		let pathInset = borderThickness - gapBetweenBorderInnerEdgeAndTextBaseline;
+		let pathRadius = Math.max(0, borderOuterRadius - pathInset);
+		let fontSize = Math.max(1, pathInset - gapBetweenBorderOuterEdgeAndTextAscent);
+		let endFadeLength = endFadeStart - endFadeFinish;
+		let contentRadius = Math.max(0, borderOuterRadius - borderThickness);
+
+		svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+		path.setAttribute("d", roundedRectTextPath(
+			pathInset,
+			pathInset,
+			width - pathInset * 2,
+			height - pathInset * 2,
+			pathRadius,
+			endFadeFinish
+		));
+		fadeMaskSolid.setAttribute("width", width);
+		fadeMaskSolid.setAttribute("height", height);
+		fadeMaskGradient.setAttribute("x", 0);
+		fadeMaskGradient.setAttribute("y", endFadeFinish);
+		fadeMaskGradient.setAttribute("width", borderThickness);
+		fadeMaskGradient.setAttribute("height", endFadeLength);
+		endFadeCover.setAttribute("x", 0);
+		endFadeCover.setAttribute("y", 0);
+		endFadeCover.setAttribute("width", borderThickness);
+		endFadeCover.setAttribute("height", endFadeFinish);
+		borderFill.setAttribute("d", [
+			roundedRectPath(0, 0, width, height, borderOuterRadius),
+			roundedRectPath(
+				borderThickness,
+				borderThickness,
+				width - borderThickness * 2,
+				height - borderThickness * 2,
+				contentRadius
+			),
+		].join(" "));
+		text.style.fontSize = `${fontSize}px`;
+		element_.style.borderRadius = `${borderOuterRadius}px`;
+		content.style.borderRadius = `${contentRadius}px`;
+	}
+
+	updateWordyBorder();
+	let resizeObserver = new ResizeObserver(updateWordyBorder);
+	resizeObserver.observe(element_);
 }
 
 window.addEventListener("DOMContentLoaded", function () {
@@ -261,7 +378,6 @@ workAroundWindGuruBug();
 		</section>
 
 		<section class="middle-column">
-
 			<div class="wordy-border-frame windfinder-wordy-border-frame" id="windfinder-forecast">
 				<div class="wordy-border-content">
 					<script src="https://www.windfinder.com/widget/forecast/js/toronto_island?unit_wave=m&unit_rain=mm&unit_temperature=c&unit_wind=kts&unit_pressure=hPa&days=1&show_day=0&show_pressure=0&show_waves=0&show_temperature=0&show_clouds=0"></script><noscript><a rel="nofollow" href="https://www.windfinder.com/forecast/toronto_island?utm_source=forecast&utm_medium=web&utm_campaign=homepageweather&utm_content=noscript-Toronto Island Airport">Wind forecast for Toronto Island Airport</a> provided by <a rel="nofollow" href="https://www.windfinder.com?utm_source=forecast&utm_medium=web&utm_campaign=homepageweather&utm_content=noscript-logo">windfinder.com</a></noscript>
