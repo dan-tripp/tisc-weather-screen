@@ -131,6 +131,10 @@
 			--wordy-border-content-height: auto;
 		}
 
+		.radar-wordy-border-frame {
+			--wordy-border-content-height: auto;
+		}
+
 		.loaded-at {
 			position: fixed;
 			right: 16px;
@@ -178,6 +182,7 @@ window.addEventListener("DOMContentLoaded", function () {
 	addWordyBorder(document.getElementById("windguru-forecast"), "WIND GURU FORECAST\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0");
 	addWordyBorder(document.getElementById("windfinder-forecast"), "WIND FINDER FORECAST\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0");
 	addWordyBorder(document.getElementById("recent-wind-history"), "TODAY'S WIND HISTORY\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0");
+	addWordyBorder(document.getElementById("current-rain-radar"), "CURRENT RAIN RADAR\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0");
 	setPageLoadedAtText();
 });
 
@@ -281,8 +286,11 @@ workAroundWindGuruBug();
 				</div>
 			</div>
 
-			<b>Current radar:</b>
-			<iframe width="650" height="300" src="https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=mm&metricTemp=°C&metricWind=kt&zoom=6&overlay=rain&product=ecmwf&level=surface&lat=43.443&lon=-79.04" frameborder="0"></iframe>
+			<div class="wordy-border-frame radar-wordy-border-frame" id="current-rain-radar">
+				<div class="wordy-border-content">
+					<iframe width="650" height="300" src="https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=mm&metricTemp=°C&metricWind=kt&zoom=6&overlay=rain&product=ecmwf&level=surface&lat=43.443&lon=-79.04" frameborder="0"></iframe>
+				</div>
+			</div>
 
 		</section>
 	</main>
