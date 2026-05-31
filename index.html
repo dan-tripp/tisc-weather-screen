@@ -10,6 +10,7 @@
 			color-scheme: light;
 			font-family: Arial, Helvetica, sans-serif;
 			--wordy-border-width: 24px;
+			--wordy-border-content-gap: 2px;
 			--right-column-width: 700px;
 			--windguru-render-width: 900px;
 			--weather-gov-wind-history-scroll-offset: 300px;
@@ -61,7 +62,7 @@
 			--wordy-border-content-height: 300px;
 			position: relative;
 			width: 100%;
-			padding: var(--wordy-border-width);
+			padding: calc(var(--wordy-border-width) + var(--wordy-border-content-gap));
 			box-sizing: border-box;
 			color: #fff;
 			overflow: hidden;
