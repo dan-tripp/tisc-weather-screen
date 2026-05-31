@@ -406,9 +406,10 @@ workAroundWindGuruBug();
 
 		<section class="rightmost-column">
 			<div class="wordy-border-frame radar-wordy-border-frame" id="current-rain-radar">
-				<!-- source: https://embed.windy.com/config/map
-				 - we use windy.com.  windy.app seems to be a copy-cat, possibly a scam. also their widget is worse.
-				 - we used to use "&overlay=rain&product=ecmwf" (== "rain, thunder") but I stopped because it also shows a wind layer and that wind direction layer is of the surface wind.  surface wind is misleading b/c it's not the direction that the rain/thunder clouds are moving.  I observed this many times easily by looking around north america for a minute.  IMO if we show any wind direction on the same map as rain/thunder then people will think that the wind direction is the direction that the rain/thunder is moving in.  so I switched to "product=radar" b/c it shows no wind.  it does show rain clouds somehow (I'm ignorant of the metric it uses), and thunder icons, and the occasional thunder flash animation.  I hope it's useful. -->
+				<!-- 
+				- source: https://embed.windy.com/config/map
+				- we use windy.com.  windy.app is different and seems dubious.  possibly a scam.  also their widget is worse.
+				- we used to use "&overlay=rain&product=ecmwf" (== "rain, thunder") but I stopped because it also shows a /surface/ wind direction layer.  surface wind is misleading in that context b/c it's not the direction that the rain/thunder clouds are moving.  I observed this many times easily by looking around north america for a minute.  IMO if we show any wind direction on the same map as rain/thunder then people will think that the wind direction is the direction that the rain/thunder is moving in, so they might decide to go sailing when they shouldn't.  so I switched to "&product=radar" b/c it shows no wind.  it does show rain clouds somehow (I'm ignorant of the metric it uses), and thunder icons, and the occasional thunder flash animation.  I hope it's useful. -->
 				<div class="wordy-border-content">
 					<iframe width="650" height="300" src="https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=mm&metricTemp=°C&metricWind=kt&zoom=7&overlay=radar&product=radar&level=surface&lat=43.443&lon=-79.04&message=true" frameborder="0"></iframe>
 					<!-- this iframe makes annoying sounds sometimes.  it's when there's lightning visible on the map.   the visual lightning flashes are neat.  but they also make a sound.  it sounds like clicking/crackling.  there's no way to prevent it AFAICS.  someone requested it as a feature here: https://community.windy.com/topic/40011/embed-full-parameter-list-and-lightning-sound-question/2 .  there's no way to block it via an iframe attribute or anything like that.  -->
