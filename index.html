@@ -147,7 +147,7 @@ function setPageLoadedAtText() {
 }
 setPageLoadedAtText();
 
-/* this is a bug where visually the wind guru content doesn't show up at all.  it takes up no space in the layout.  afaics it happened solely b/c sometimes the wind guru iframe gets a style attribute which contains "height: 0px".  and of course it was the wind guru JS that did that.  I don't know why it did it.  the wind guru JS must have a bug.  I couldn't reproduce this bug on demand by reloading the page w ctrl+r.  I saw the bug about five times, in the first two days of this project, after I had left this page open in a tab for a few hours.  IIRC I saw it both on localhost and github pages.  */
+/* this works around a bug in wind guru where visually the wind guru content doesn't show up at all.  it takes up no space in the layout.  but inside the iframe, the dom content is all there.  afaics it happens solely b/c sometimes the wind guru iframe gets a style attribute which contains "height: 0px".  and of course it was the wind guru JS that did that.  I don't know why it did it.  the wind guru JS must have a bug.  I couldn't reproduce this bug on demand by reloading the page w/ ctrl+r.  but it was easy to reproduce if I left the page open in a tab for a few hours.  I saw the bug that way about five times, in the first two days of this project.  IIRC I saw it both on localhost and github pages.  */
 function workAroundWindGuruBug() {
 	window.addEventListener("load", function () {
 		var windguruRetryDelay = 5*1000;
@@ -164,7 +164,7 @@ function workAroundWindGuruBug() {
 
 			window.setTimeout(function () {
 				frame.dataset.windguruReloadScheduled = "false";
-				if(frame.offsetHeight > 0) return; // 0 is the symptom of the problem 
+				if(frame.offsetHeight > 0) return; // 0 is the symptom of the problem.  it's not exactly the /cause/ of it.  the cause is <iframe style="... height: 0px; ..." 
 				frame.src = frame.src; // this is what does the "reload".
 			}, windguruRetryDelay);
 		}
