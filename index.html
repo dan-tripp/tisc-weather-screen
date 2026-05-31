@@ -9,6 +9,7 @@
 		:root {
 			color-scheme: light;
 			font-family: Arial, Helvetica, sans-serif;
+			--wordy-border-width: 24px;
 			--right-column-width: 700px;
 			--weather-gov-wind-history-scroll-offset: 300px;
 			background: #f4f7f9;
@@ -23,7 +24,7 @@
 
 		main {
 			display: grid;
-			grid-template-columns: 320px minmax(0, 1fr) var(--right-column-width);
+			grid-template-columns: auto minmax(0, 1fr) var(--right-column-width);
 			gap: 16px;
 			height: 100vh;
 			padding: 16px 16px 40px;
@@ -41,8 +42,6 @@
 		}
 
 		.metar-widget {
-			width: 300px;
-			height: 435px;
 			display: block;
 			font-size: 18px;
 			font-weight: 500;
@@ -58,15 +57,17 @@
 		}
 
 		.wordy-border-frame {
+			--wordy-border-top-height: 24px;
+			--wordy-border-content-height: 300px;
 			display: grid;
 			grid-template-areas:
 				"top top top"
 				"left content right"
 				"bottom bottom bottom";
-			grid-template-columns: 24px minmax(0, 1fr) 24px;
-			grid-template-rows: 24px 300px 24px;
+			grid-template-columns: var(--wordy-border-width) minmax(0, 1fr) var(--wordy-border-width);
+			grid-template-rows: var(--wordy-border-top-height) var(--wordy-border-content-height) var(--wordy-border-top-height);
 			width: 100%;
-			background: #1d252c;
+			background: #4d4d4d;
 			color: #fff;
 			font-size: 11px;
 			font-weight: 700;
@@ -75,8 +76,11 @@
 		}
 
 		.wordy-border-text {
+			min-width: 0;
+			min-height: 0;
 			overflow: hidden;
 			white-space: nowrap;
+			contain: size;
 		}
 
 		.wordy-border-top {
@@ -103,8 +107,14 @@
 
 		.wordy-border-content {
 			grid-area: content;
-			height: 300px;
+			height: var(--wordy-border-content-height);
 			overflow: hidden;
+			background: #fff;
+		}
+
+		.metar-wordy-border-frame {
+			--wordy-border-content-height: auto;
+			width: max-content;
 		}
 
 		.loaded-at {
@@ -150,6 +160,7 @@ function addWordyBorder(element_, string_) {
 }
 
 window.addEventListener("DOMContentLoaded", function () {
+	addWordyBorder(document.getElementById("metar"), "CURRENT WIND, ISLAND AIRPORT\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0");
 	addWordyBorder(document.getElementById("recent-wind-history"), "TODAY'S WIND HISTORY\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0");
 	setPageLoadedAtText();
 });
@@ -204,10 +215,14 @@ workAroundWindGuruBug();
 <body>
 	<main>
 		<section class="metar-section">
-			<a
-				class="metar-widget"
-				href="https://metar-taf.com/metar/CYTZ"
-				id="metartaf-l1JDyf9u">METAR Billy Bishop Toronto City Airport</a>
+			<div class="wordy-border-frame metar-wordy-border-frame" id="metar">
+				<div class="wordy-border-content">
+					<a
+						class="metar-widget"
+						href="https://metar-taf.com/metar/CYTZ"
+						id="metartaf-l1JDyf9u">METAR Billy Bishop Toronto City Airport</a>
+				</div>
+			</div>
 			<script async defer crossorigin="anonymous" src="https://metar-taf.com/embed-js/CYTZ?visibility=mi&qnh=inHg&rh=rh&target=l1JDyf9u"></script>
 		</section>
 
@@ -237,7 +252,6 @@ workAroundWindGuruBug();
 					<iframe
 						class="weather-gov-wind-history-iframe"
 						scrolling="no"
-						title="weather.gov wind speed and gust observations"
 						src="https://www.weather.gov/wrh/timeseries?site=CYTZ&hours=12&units=english_k&chart=off&headers=on&obs=tabular&hourly=true&pview=standard&font=12&plot=wind_speedgust">
 					</iframe>
 				</div>
