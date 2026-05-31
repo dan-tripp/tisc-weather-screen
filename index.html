@@ -11,6 +11,7 @@
 			font-family: Arial, Helvetica, sans-serif;
 			--wordy-border-width: 24px;
 			--right-column-width: 700px;
+			--windguru-render-width: 900px;
 			--weather-gov-wind-history-scroll-offset: 300px;
 			background: #f4f7f9;
 			color: #1d252c;
@@ -119,6 +120,11 @@
 
 		.windguru-wordy-border-frame {
 			--wordy-border-content-height: auto;
+		}
+
+		.windguru-wordy-border-frame iframe { /* this is a workaround for another wind guru bug: that its row headers disappear ("Wind speed (knots)" etc.), when I zoom in even slightly, even though there's a lot of empty space to the right. */
+			width: var(--windguru-render-width) !important;
+			max-width: none;
 		}
 
 		.windfinder-wordy-border-frame {
