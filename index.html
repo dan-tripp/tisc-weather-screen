@@ -150,7 +150,6 @@ function addWordyBorder(element_, string_) {
 	for(let side of ["top", "right", "bottom", "left"]) {
 		let borderText = document.createElement("div");
 		borderText.className = "weather-border-text weather-border-" + side;
-		borderText.setAttribute("aria-hidden", "true");
 		borderText.textContent = repeatedText;
 		element_.insertBefore(borderText, content);
 	}
@@ -239,7 +238,7 @@ workAroundWindGuruBug();
 		</section>
 
 		<section class="weather-pane">
-			<div class="weather-frame" id="recent-wind-history" aria-label="Recent wind history">
+			<div class="weather-frame" id="recent-wind-history">
 				<div class="weather-window">
 					<iframe
 						class="weather-widget"
