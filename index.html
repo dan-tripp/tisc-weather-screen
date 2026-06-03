@@ -115,6 +115,15 @@
 			--wordy-border-content-height: auto;
 		}
 
+		.windfinder-wordy-border-frame .wordy-border-content {
+			width: 550px; /* this is a workaround for a windfinder bug: it collapses horizontally on ~ 25% of page loads.  
+			by "collapses" I mean: the leftmost column (= the row headers) don't show up.  instead, a button shows up: "click to toggle legend".
+			testing this workaround is awkward b/c I couldn't reproduce the bug on localhost.  so at the time of writing, I don't know if this workaround works. 
+			- reprod on prod (= github pages) at viewport 1920 px wide: 25% of the time. 
+			- reprod on localhost at viewport 1920 px wide: 0/50 times.  
+			- reprod on localhost at viewport 1536 px: 100% of the time.  but at this viewport width, it's a feature, not a bug. */
+		}
+
 		.radar-wordy-border-frame {
 			--wordy-border-content-height: auto;
 		}
