@@ -116,7 +116,8 @@
 		}
 
 		.windfinder-wordy-border-frame .wordy-border-content {
-			width: 550px; /* this is a workaround for a windfinder bug: it collapses horizontally on ~ 25% of page loads.  
+			width: 550px; /* comment f8a6e21c: 
+			this is a workaround for a windfinder bug: it collapses horizontally on ~ 25% of page loads.  
 			by "collapses" I mean: the leftmost column (= the row headers) don't show up.  instead, a button shows up: "click to toggle legend".
 			testing this workaround is awkward b/c I couldn't reproduce the bug on localhost.  so at the time of writing, I don't know if this workaround works. 
 			- reprod on prod (= github pages) at viewport 1920 px wide: 25% of the time. 
@@ -169,6 +170,14 @@ function setFooterLineText() {
 		let s = `${window.innerWidth} x ${window.innerHeight}`;
 		el.textContent = s;
 	}
+}
+
+/* this is a second attempt at fixing the windfinder bug documented at comment f8a6e21c.  b/c the first attempt didn't work. */
+function addWindfinderForecast() {
+	let placeholder = document.getElementById("windfinder-widget-placeholder");
+	let script = document.createElement("script");
+	script.src = "https://www.windfinder.com/widget/forecast/js/toronto_island?unit_wave=m&unit_rain=mm&unit_temperature=c&unit_wind=kts&unit_pressure=hPa&days=1&show_day=0&show_pressure=0&show_waves=0&show_temperature=0&show_clouds=0";
+	placeholder.append(script);
 }
 
 function addWordyBorder(element_, string_) {
@@ -323,6 +332,7 @@ window.addEventListener("DOMContentLoaded", function () {
 	addWordyBorder(document.getElementById("windfinder-forecast"), "WIND FINDER FORECAST\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0");
 	addWordyBorder(document.getElementById("recent-wind-history"), "TODAY'S WIND HISTORY\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0");
 	addWordyBorder(document.getElementById("current-rain-radar"), "CURRENT RADAR\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0");
+	addWindfinderForecast();
 	setFooterLineText();
 });
 
@@ -390,7 +400,7 @@ workAroundWindGuruBug();
 		<section class="middle-column">
 			<div class="wordy-border-frame windfinder-wordy-border-frame" id="windfinder-forecast">
 				<div class="wordy-border-content">
-					<script src="https://www.windfinder.com/widget/forecast/js/toronto_island?unit_wave=m&unit_rain=mm&unit_temperature=c&unit_wind=kts&unit_pressure=hPa&days=1&show_day=0&show_pressure=0&show_waves=0&show_temperature=0&show_clouds=0"></script><noscript><a rel="nofollow" href="https://www.windfinder.com/forecast/toronto_island?utm_source=forecast&utm_medium=web&utm_campaign=homepageweather&utm_content=noscript-Toronto Island Airport">Wind forecast for Toronto Island Airport</a> provided by <a rel="nofollow" href="https://www.windfinder.com?utm_source=forecast&utm_medium=web&utm_campaign=homepageweather&utm_content=noscript-logo">windfinder.com</a></noscript>
+					<div id="windfinder-widget-placeholder"></div>
 				</div>
 			</div>
 
