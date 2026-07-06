@@ -33,7 +33,7 @@
 			box-sizing: border-box;
 		}
 
-		.metar-section,
+		.sailflow-current-wind-section,
 		.middle-column,
 		.rightmost-column {
 			display: grid;
@@ -41,13 +41,6 @@
 			gap: 16px;
 			height: calc(100vh - 56px);
 			overflow: auto;
-		}
-
-		.metar-widget {
-			display: block;
-			font-size: 18px;
-			font-weight: 500;
-			color: #000;
 		}
 
 		.weather-gov-wind-history-iframe {
@@ -97,7 +90,7 @@
 			background: #fff;
 		}
 
-		.metar-wordy-border-frame {
+		.sailflow-current-wind-wordy-border-frame {
 			--wordy-border-content-height: auto;
 			width: max-content;
 		}
@@ -327,7 +320,7 @@ function addWordyBorder(element_, string_) {
 }
 
 window.addEventListener("DOMContentLoaded", function () {
-	addWordyBorder(document.getElementById("metar"), "CURRENT WIND, ISLAND AIRPORT\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0");
+	addWordyBorder(document.getElementById("sailflow-current-wind"), "CURRENT WIND, ISLAND AIRPORT\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0");
 	addWordyBorder(document.getElementById("windguru-forecast"), "WIND GURU FORECAST\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0");
 	addWordyBorder(document.getElementById("windfinder-forecast"), "WIND FINDER FORECAST\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0");
 	addWordyBorder(document.getElementById("recent-wind-history"), "TODAY'S WIND HISTORY\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0");
@@ -385,16 +378,12 @@ workAroundWindGuruBug();
 </head>
 <body>
 	<main>
-		<section class="metar-section">
-			<div class="wordy-border-frame metar-wordy-border-frame" id="metar">
+		<section class="sailflow-current-wind-section">
+			<div class="wordy-border-frame sailflow-current-wind-wordy-border-frame" id="sailflow-current-wind">
 				<div class="wordy-border-content">
-					<a
-						class="metar-widget"
-						href="https://metar-taf.com/metar/CYTZ"
-						id="metartaf-l1JDyf9u">METAR Billy Bishop Toronto City Airport</a>
+					<iframe align="top" name="wind-map" id="wind-map" src="https://widgets.sailflow.com/widgets/web/windMap?w=400&h=450&c=0A2946&rp=18&m_m=t&csn=Toronto Island Airport&search=43.6275,-79.39617&sn=Toronto Island&sid=826&u_w=kts&u_t=C&act=Sail&app=sailflow" width="400" height="450" frameborder="0" scrolling="no" allowtransparency="no"></iframe>
 				</div>
 			</div>
-			<script async defer crossorigin="anonymous" src="https://metar-taf.com/embed-js/CYTZ?visibility=mi&qnh=inHg&rh=rh&target=l1JDyf9u"></script>
 		</section>
 
 		<section class="middle-column">
