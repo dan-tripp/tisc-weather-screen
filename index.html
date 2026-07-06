@@ -33,7 +33,7 @@
 			box-sizing: border-box;
 		}
 
-		.sailflow-current-wind-section,
+		.navcanada-current-wind-section,
 		.middle-column,
 		.rightmost-column {
 			display: grid;
@@ -90,9 +90,24 @@
 			background: #fff;
 		}
 
-		.sailflow-current-wind-wordy-border-frame {
+		.navcanada-current-wind-wordy-border-frame {
 			--wordy-border-content-height: auto;
 			width: max-content;
+		}
+
+		.navcanada-current-wind-iframe-viewport {
+			width: 505px;
+			height: 500px;
+			overflow: hidden;
+			background: #202020;
+		}
+
+		.navcanada-current-wind-iframe {
+			width: 1920px;
+			height: 900px;
+			border: 0;
+			transform-origin: top left;
+			transform: translate(-510px, -330px);
 		}
 
 		.windguru-wordy-border-frame {
@@ -320,7 +335,7 @@ function addWordyBorder(element_, string_) {
 }
 
 window.addEventListener("DOMContentLoaded", function () {
-	addWordyBorder(document.getElementById("sailflow-current-wind"), "CURRENT WIND, ISLAND AIRPORT\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0");
+	addWordyBorder(document.getElementById("navcanada-current-wind"), "CURRENT WIND, ISLAND AIRPORT\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0");
 	addWordyBorder(document.getElementById("windguru-forecast"), "WIND GURU FORECAST\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0");
 	addWordyBorder(document.getElementById("windfinder-forecast"), "WIND FINDER FORECAST\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0");
 	addWordyBorder(document.getElementById("recent-wind-history"), "TODAY'S WIND HISTORY\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0");
@@ -378,10 +393,12 @@ workAroundWindGuruBug();
 </head>
 <body>
 	<main>
-		<section class="sailflow-current-wind-section">
-			<div class="wordy-border-frame sailflow-current-wind-wordy-border-frame" id="sailflow-current-wind">
+		<section class="navcanada-current-wind-section">
+			<div class="wordy-border-frame navcanada-current-wind-wordy-border-frame" id="navcanada-current-wind">
 				<div class="wordy-border-content">
-					<iframe align="top" name="wind-map" id="wind-map" src="https://widgets.sailflow.com/widgets/web/windMap?w=400&h=450&c=0A2946&rp=18&m_m=t&csn=Toronto Island Airport&search=43.6275,-79.39617&sn=Toronto Island&sid=826&u_w=kts&u_t=C&act=Sail&app=sailflow" width="400" height="450" frameborder="0" scrolling="no" allowtransparency="no"></iframe>
+					<div class="navcanada-current-wind-iframe-viewport">
+						<iframe class="navcanada-current-wind-iframe" src="https://spaces.navcanada.ca/workspace/aeroview/CYTZ" scrolling="no"></iframe>
+					</div>
 				</div>
 			</div>
 		</section>
